@@ -83,7 +83,7 @@ Several skills call others by name, like babysit calling fix-ci. Installing all 
 ## What they need
 
 - **The GitHub CLI.** babysit, fix-ci, get-pr-comments, make-pr-easy-to-review, review-code, check-gaps, explain-why and ship-plan call `gh`.
-- **orb, a terminal multiplexer for coding agents.** approve-plan, hand-off, ship-plan, plan-with-me and run-arena use it to start agents in their own sessions and panes.
+- **[orb](https://github.com/felixpherry/orb), a terminal multiplexer for coding agents.** approve-plan, hand-off, ship-plan, plan-with-me and run-arena use it to start agents in their own sessions and panes.
 - **[lavish-axi](https://github.com/kunchenguid/lavish-axi).** plan-with-me and audit-skills show plans and reviews as pages you can click through.
 - **Jira and Confluence access.** read-ticket and check-gaps read Jira tickets. write-confluence-doc writes Confluence pages.
 
