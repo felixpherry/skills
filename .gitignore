@@ -1,0 +1,14 @@
+# Local working files
+.plans/
+.lavish/
+
+# Claude Code's folders for synced and removed skills
+.trash/
+synced/
+
+# Installed by other tools, which ship them from their own repos
+axi/
+gh-axi/
+lavish/
+orb/
+terminal-browser
