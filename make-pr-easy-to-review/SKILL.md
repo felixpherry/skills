@@ -19,7 +19,7 @@ Prepare a PR so a reviewer can quickly understand the intent, important files, a
 
 ## Before the PR exists
 
-When the branch has no PR and hasn't been pushed (ship-plan calls it this way), every commit is local and yours, so clean up history without being asked. Note `git rev-parse HEAD^{tree}` before you start and check it's unchanged after. Don't push, and write the description to the file the caller names instead of running `gh pr edit`.
+When the branch has no PR and hasn't been pushed (ship-plan calls it this way), every commit is local and yours, so clean up history without being asked. Note `git rev-parse HEAD^{tree}` before you start and check it's unchanged after. Don't push, and write the description to the file the caller names instead of running `gh pr edit`. If the caller gives the description's sections (ship-plan does), use those. If it gives a plan folder with pictures, pick them as below and list the files to attach after the description.
 
 ## History Cleanup
 
@@ -51,12 +51,25 @@ Do not push if the tree changed unintentionally. If it matches, push with `git p
 
 ## Reviewer Guidance
 
-Guidance goes in the PR description (`gh pr edit <PR> --body-file <file>`), never in comments on the diff. Keep it short:
+Guidance goes in the PR description (`gh pr edit <PR> --body-file <file>`), never in comments on the diff. Keep it short enough that the reviewer reads all of it. Put these at the top, before the repo's usual template:
 
-- Add a TL;DR that matches the actual diff.
-- Separate core files from generated or mechanical files.
-- Call out risky behavior changes, migration order, rollout plan, and test coverage.
-- Link issue trackers, dashboards, or design docs when they explain intent.
+- **Summary:** what changed, at most 5 bullets, matching the actual diff. Name the generated or mechanical files in one line, so the reviewer can skip them.
+- **How it was tried:** the tests and checks that ran and what they showed, with pictures (see below), and the commands to try it yourself.
+- **Needs your call:** at most 5 items, worst first: risky behavior changes, migration order or rollout, gaps in the tests, open questions. If there are more, say how many and where the rest are written down.
+
+Link issue trackers, dashboards, or design docs when they explain intent. Leave out everything else. A reviewer skims a long description.
+
+## Pictures
+
+When the plan folder has `media/media.md`, taste-test's pictures and videos, show the change instead of only describing it.
+
+- **Pick up to 3 pictures and 1 short video:** the ones that best show the change working. Anything still broken gets one, even past that. The rest stay in the plan folder; say so in one line.
+- **Put each under the line it proves,** as `![<what it shows>](<path>)`, videos too, with the same path you pass to `--attach`. gh swaps each one for its upload in place. A path on its own stays as text, and its file lands at the bottom.
+- **In a public repo, pick only pictures that show nothing private:** no names, paths, messages or tokens from the user's data. If none qualifies, leave them all out and say so.
+- **Leave out any file over 10 MB.** GitHub refuses them.
+- **Attach them** with one `--attach <path>` each, on the `gh pr create` or `gh pr edit` that sets the description. It needs gh 2.99 or newer. With an older one, leave the pictures out and say so under Needs your call.
+- **If gh says attaching files requires write access,** and `gh auth status` lists another login for the host, run that one command again with `GH_TOKEN` set from `gh auth token --user <login>`. Never print the token.
+- **If `gh pr create` fails after printing a link,** the PR exists. Fix it with `gh pr edit`, which is safe to repeat, and never open a second PR. If attaching still fails, take the picture lines out and say so under Needs your call.
 
 ## Guardrails
 
