@@ -69,6 +69,7 @@ Several skills call others by name, like babysit calling fix-ci. Installing all 
 | Skill | What it does |
 |---|---|
 | unslop | Cuts AI tells from any writing. |
+| quietly-eloquent | Writes in a measured voice: plain words, honest confidence, specific credit and dry humor. Meant to be on by default. |
 | bro | Restates the last message in plain words. |
 | catch-me-up | Sums up what changed in the chat since your last message, and what needs your call. |
 | write-confluence-doc | Writes Confluence pages people can skim, with bold claims, tables and a TL;DR up top. |
