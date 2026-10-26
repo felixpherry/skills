@@ -1,6 +1,7 @@
 ---
 name: write-recipe
-description: Writes a recipe for trying a project the way its user does: how to start a throwaway copy with real data and real logins, check it's healthy, drive it, capture proof and clean up, plus a short map of its main features. Puts every fixed step in a script, with a self-test that runs them all, and proves the recipe before handing it over, and keeps it outside the repo in ~/.orb/recipes, where taste-test finds it. Asks the user an intake round, so it never runs unattended. Use for "write a recipe for this repo", "how do we try this app", when approve-plan finds a repo has no recipe, or when a recipe has gone stale.
+description: >-
+  Writes a recipe for trying a project the way its user does: how to start a throwaway copy with real data and real logins, check it's healthy, drive it, capture proof and clean up, plus a short map of its main features. Puts every fixed step in a script, with a self-test that runs them all, and proves the recipe before handing it over, and keeps it outside the repo in ~/.orb/recipes, where taste-test finds it. Asks the user an intake round, so it never runs unattended. Use for "write a recipe for this repo", "how do we try this app", when approve-plan finds a repo has no recipe, or when a recipe has gone stale.
 ---
 
 # Write a recipe
