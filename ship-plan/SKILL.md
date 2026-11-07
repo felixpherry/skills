@@ -31,7 +31,7 @@ Run the steps in order. Each step names the skill it uses, so changing this list
 1.  **Build.** A helper runs the chosen loop: `/run-<loop>-loop <plan folder>`. For the phased loop, the helper is that loop's orchestrator, so don't tell it to run solo.
 2.  **Taste test.** A helper runs taste-test on the plan folder. Its broke lines go to the fixer. Its couldn't-try lines go to **Known limitations**. Any change it made to the recipe goes in your report back, not the PR.
 3.  **Review.** Helpers at the same time, read-only:
-    - interrogate;
+    - interrogate, told to run correctness only when the loop is micro;
     - check-blast-radius on the branch's diff;
     - the repo's own review skill or agent, if it has one.
 
@@ -41,7 +41,7 @@ Run the steps in order. Each step names the skill it uses, so changing this list
 6.  **Simplify.** A helper runs the `simplify` skill if you have it, then deslop, on the branch's changes, then runs `test`.
 7.  **Spec check.** A helper runs check-gaps on the plan folder, fixes every gap it lists, then runs `check` and `test` until both pass.
 8.  **Verify.** A helper runs `check` and `test`, then lints and formats the files that changed, and fixes until everything passes.
-9.  **Taste test again.** A helper runs taste-test's second run. Anything still broken goes to **Known limitations**; don't fix it.
+9.  **Taste test again, only if code changed.** If no step since the first taste test changed code, skip this; the first run's verdicts stand. Otherwise a helper runs taste-test's second run. Anything still broken goes to **Known limitations**; don't fix it.
 10. **Tidy the branch.** A helper runs make-pr-easy-to-review before anything is pushed: it squashes noise into clean commits, writes the PR description (see below) to a file, and lists the pictures to attach. Give it the plan folder.
 11. **Open the PR.** A helper pushes the branch and opens the PR with that description, using the repo's own PR skill if it has one, else `gh pr create`. It attaches the listed pictures as make-pr-easy-to-review says, with `gh pr edit` after if the repo's skill can't attach. It returns the link. Then stop every helper still running.
 12. **Babysit CI.** A helper runs babysit with `ci-only` on the new PR: it fixes failing checks and merge conflicts, then stops. It never waits for reviewers.

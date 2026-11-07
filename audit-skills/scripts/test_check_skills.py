@@ -15,6 +15,11 @@ description: Turns meeting notes into a task list. Use when the user pastes note
 # Good skill
 
 Read [the format](format.md), then hand off to the bad-skill skill.
+Put each picture under its line as `![shot](<path>)`.
+
+```
+[example](nowhere.md)
+```
 """
 
 BAD = """---

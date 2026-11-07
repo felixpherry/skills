@@ -22,6 +22,7 @@ SKILL_REF = re.compile(r'`/?([a-z0-9]+(?:-[a-z0-9]+)*)`\s+skill\b|\b([a-z0-9]+(?
 IPV4 = re.compile(r'\b(?!127\.|0\.0\.0\.0)(?:\d{1,3}\.){3}\d{1,3}\b')
 DATED = re.compile(r'\b(as of|since|until|before|after)\s+(\d{4}|(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept?|oct|nov|dec)\b)', re.I)
 LOCAL_LINK = re.compile(r'\]\((?!https?:|mailto:|#)([^)\s]+)\)')
+INLINE_CODE = re.compile(r'`[^`]*`')
 TOC = re.compile(r'^#+\s*(contents|table of contents)\b', re.I | re.M)
 
 
@@ -93,7 +94,10 @@ def audit(skill_dir, known, private):
         except (UnicodeDecodeError, OSError):
             continue
         is_md = f.suffix == '.md'
+        in_fence = False
         for i, line in enumerate(lines, 1):
+            if is_md and line.lstrip().startswith(('```', '~~~')):
+                in_fence = not in_fence
             outside = sorted({m.group(0) for m in OUTSIDE.finditer(line)})
             if outside:
                 add(rel, i, 'outside-path', 'check', f'{", ".join(outside)}: outside the skill; breaks on other machines and agents unless that is the point')
@@ -111,7 +115,8 @@ def audit(skill_dir, known, private):
                     ref = next(g for g in m.groups() if g)
                     if ref not in known and ref != name:
                         add(rel, i, 'missing-skill', 'check', f'refers to "{ref}", which is not a skill here or a known built-in')
-                for m in LOCAL_LINK.finditer(line):
+                prose = '' if in_fence else INLINE_CODE.sub('', line)
+                for m in LOCAL_LINK.finditer(prose):
                     target = m.group(1).split('#')[0]
                     if target and not (f.parent / target).exists():
                         add(rel, i, 'link', 'fix', f'links to {target}, which does not exist')
