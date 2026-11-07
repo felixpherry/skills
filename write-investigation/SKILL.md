@@ -1,9 +1,6 @@
 ---
 name: write-investigation
 description: Writes or revises an engineering investigation as a story, with a strange title that makes sense by the end, bold claims backed by evidence, plain explanations, and a little humor. Use when drafting a report from research notes, rewriting an investigation or proposal, suggesting titles or headings, or critiquing a draft, especially when there's a question to answer, competing explanations, or a surprising measurement. Not for release notes, runbooks, API docs, or incident updates.
-metadata:
-  author: Felix
-  version: "1.0"
 ---
 
 # Investigative Engineering Storytelling

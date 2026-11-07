@@ -2,6 +2,23 @@
 
 Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic.
 
+## Contents
+
+- Branded types
+- Discriminated unions
+- Constructive modeling
+- Simplest total type
+- `unknown` over `any`
+- Schemas before hand-rolled guards
+- No `as` casts
+- Narrowing hierarchy
+- Type guards
+- Exhaustiveness
+- `satisfies` over `as`
+- Boundary validation
+- Schema-derived types
+- Object args
+
 ## Branded types
 
 Brand primitives so they can't be mixed up. Validate once at the boundary. Downstream code trusts the type.

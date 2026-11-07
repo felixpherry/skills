@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: Cut AI tells from any writing.
+description: Cuts AI tells from writing. Always active.
 metadata:
   based-on: "unslop from pstack by Lauren Tan, cursor/plugins (MIT)"
 ---

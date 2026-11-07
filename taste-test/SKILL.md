@@ -66,7 +66,7 @@ After each `risks.md` line, add its verdict (`→ pass`, `→ broke`, `→ could
 
 ## Second run
 
-Try again everything that broke or couldn't be tried, and each criterion the fixes touched. Anything still broken goes to the user, not to another fix round.
+Try again only the checks that the changes since the first run touched, including each broke line a fix aimed at. Every other check keeps its first verdict. Anything still broken goes to the user, not to another fix round.
 
 ## Clean up
 
