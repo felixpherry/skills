@@ -18,7 +18,8 @@ You run unattended: nobody answers questions. Never stop to ask. When something 
 Your context is for decisions, not file contents. Run every step below in a fresh subagent and keep only what it reports back. Use subagents, not orb sessions or colonists: helpers must work in this worktree, and a new session would get a different checkout.
 
 - **Each helper gets** the plan folder, the step's skill and arguments, the unattended rule above (never ask; note divergences in `plan.md` and risks in `risks.md`), and what to return: at most ten lines on what it did, what it changed, what failed, and what's left open.
-- **You read only** those reports, `tasks.md`, and `git status`. Don't open source files, diffs or test logs yourself. If a report is unclear, send a helper to find out.
+- **You read only** those reports, `tasks.md`, `ship.md` and `git status`. Don't open source files, diffs or test logs yourself. If a report is unclear, send a helper to find out.
+- **Keep a step log in `ship.md`, in the plan folder.** After each step, add one line: the step's number and name, done or skipped, and the two lines of its report a successor would need, such as which findings falsify ruled on, what is still open, or the PR link. Before step 1, read the log: if it exists, start at the first step it doesn't list. After a compaction, read it again before the next step.
 - **One helper at a time,** since they share the worktree. The only exception is the review step's reviewers, which only read.
 - **A helper that has reported is done.** If it's still running (in the background, in a pane, in a session you started), stop it.
 - **Helpers may start their own helpers** when their skill says so, like interrogate's reviewers or the phased loop's per-phase agents.
