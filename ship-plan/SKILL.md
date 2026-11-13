@@ -29,6 +29,8 @@ Your context is for decisions, not file contents. Run every step below in a fres
 
 Run the steps in order. Each step names the skill it uses, so changing this list changes the pipeline.
 
+**Before the first step you run, check that you can push.** Run `git push --dry-run origin HEAD` yourself. It asks the remote for write access and sends nothing. If it fails, stop and go to **Report back** with its error. Step 11 would fail the same way, after every step before it had run.
+
 1.  **Build.** A helper runs the chosen loop: `/run-<loop>-loop <plan folder>`. For the phased loop, the helper is that loop's orchestrator, so don't tell it to run solo.
 2.  **Taste test.** A helper runs taste-test on the plan folder. Its broke lines go to the fixer. Its couldn't-try lines go to **Known limitations**. Any change it made to the recipe goes in your report back, not the PR.
 3.  **Review.** Helpers at the same time, read-only:
