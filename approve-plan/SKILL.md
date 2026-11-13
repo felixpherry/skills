@@ -12,6 +12,7 @@ The user has approved the plan discussed previously. Your task is to create the 
 1.  **Synthesize History:** Review the entire Socratic dialogue and the approved plan. Extract all technical decisions, code references, and algorithms discussed.
 2.  **Generate Specification:** Create a comprehensive, standalone technical specification and save with `Write` to `.plans/<task>/plan.md` (where `<task>` is a slugified version of the task name). The specification is the "spec" — the authoritative reference for what to implement.
     - **A fix plan from diagnose-bug:** write the spec and task list into its notes folder, `.plans/<bug>/`, next to `diagnosis.md`, the repro and `fix.patch`. The fix starts from `fix.patch`. The repro becomes a test in the repo where one fits; otherwise rerunning it is an acceptance criterion.
+    - **A plan that changes several repos:** write one spec and one task list per repo, each in `.plans/<task>/` inside that repo, and start one run per repo. Each spec and task list covers only its own repo's part, says what the other repos change, and proves its part without waiting for them.
 3.  **Review Specification:** Re-read the generated spec end-to-end. Verify that every phase from the approved plan is covered, that all mandatory sections are present, and that a fresh agent could implement the feature using only this document. Fix any gaps, inconsistencies, or ambiguities you find.
 4.  **Create Task List:** `Write` `.plans/<task>/tasks.md` with every task from the approved plan, in phase order — one `##` header per phase, one `- [ ]` line per task:
 
@@ -25,16 +26,16 @@ The user has approved the plan discussed previously. Your task is to create the 
 
     Use the same phases that appear in the spec. The task-loop skills read and tick this file; it is the progress tracker, the spec is not. **Append a final phase called "Verification"** with each acceptance criterion from the approved plan as a separate task in that phase. This ensures the agent verifies all acceptance criteria before declaring the task complete.
     - The "Verification" phase must include "Record Updates" at the end iff the approved plan contains a "Record Updates" section. The task description must encode this two-part logic: (1) review the complete implementation; (2a) if the implementation matches the planned Record Updates, write those exact entries into `.agents/RECORD.md`; (2b) if the implementation **diverged** from the planned entries, **do not write a wrong entry** — instead surface the divergence in your final implementation summary so the user can resolve it.
-5.  **Pick the loop,** with a one-line reason:
+5.  **Pick the loop for each run,** with a one-line reason:
     - **run-micro-loop:** simple, low-risk work where building between phases would only waste time.
     - **run-simple-loop:** everyday work, steered by `check`, including refactors where the build breaks between tasks.
     - **run-phased-loop:** work where later phases depend on what earlier ones discover, or anything risky or large.
-6.  **Pick the model and effort,** with a one-line reason. Default to the model you run on at `high` effort; use a faster model at `medium` only for micro runs. If the user's approval named a loop, model or effort ("phased, opus"), use those instead.
-7.  **Check for a recipe.** taste-test tries the build with the repo's recipe, `~/.orb/recipes/<repo>/RECIPE.md`, where `<repo>` is the end of the repo's `origin` remote, else its main checkout's folder name. If there is none, ask the user: "<repo> has no recipe yet, so the taste test will build its own setup. Write one now? write-recipe asks you a few questions first." On yes, run write-recipe, then go on. On no, go on.
-8.  **Start the run.** Don't wait for another OK: the plan's approval covers it.
-    - **In orb** (`$ORB_PANE_ID` is set): use the hand-off skill with a new worktree, the chosen model and effort, and this goal: run `/ship-plan <absolute path to .plans/<task>> <loop> report-to <your pane id>`, where `<loop>` is `micro`, `simple` or `phased`.
-    - **Not in orb:** create a branch and run that same command yourself, minus `report-to`.
-9.  **Report** in three lines: where the spec and task list are; the loop, model and effort, each with its reason; and where the run is going and that it reports back with a PR.
+6.  **Pick the model and effort for each run,** with a one-line reason. Default to the model you run on at `high` effort; use a faster model at `medium` only for micro runs. If the user's approval named a loop, model or effort ("phased, opus"), use those instead.
+7.  **Check each repo for a recipe.** taste-test tries the build with the repo's recipe, `~/.orb/recipes/<repo>/RECIPE.md`, where `<repo>` is the end of the repo's `origin` remote, else its main checkout's folder name. With no recipe, it builds its own setup. Don't ask about a missing recipe; note it for the report.
+8.  **Start one run per repo.** Don't wait for another OK: the plan's approval covers it.
+    - **In orb** (`$ORB_PANE_ID` is set): use the hand-off skill with a new worktree of that repo, the chosen model and effort, and this goal: run `/ship-plan <absolute path to .plans/<task>> <loop> report-to <your pane id>`, where `<loop>` is `micro`, `simple` or `phased`.
+    - **Not in orb:** in each repo, create a branch and run that same command yourself, minus `report-to`.
+9.  **Report** in three lines: where the specs and task lists are; the loop, model and effort, each with its reason; and where each run is going and that it reports back with a PR. Add one line per repo with no recipe: "<repo> has no recipe, so the taste test builds its own setup. write-recipe can write one; it asks you a few questions first."
 
 ## Mandatory Elements
 

@@ -20,7 +20,7 @@ Several skills call others by name, like babysit calling fix-ci. Installing all 
 ## The flow
 
 1. **plan-with-me** plans the change with you before any code gets written. For a bug, **diagnose-bug** finds and proves the cause first, then ends with a fix plan.
-2. **approve-plan** turns the plan into a spec and a task list, then starts ship-plan in its own session. If the repo has no recipe for trying it, it offers to write one with write-recipe.
+2. **approve-plan** turns the plan into a spec and a task list, then starts ship-plan in its own session. If a repo has no recipe for trying it, its report says so, and write-recipe can write one.
 3. **ship-plan** runs a task loop and tries the build like a user. Then it reviews the work, has falsify argue against each finding, and fixes what's proven in one round. It checks the work against the plan, tries it again, and opens a PR with pictures of what it tried.
 4. **babysit** keeps the PR mergeable until you merge it.
 
