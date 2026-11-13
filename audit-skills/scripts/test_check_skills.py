@@ -66,4 +66,11 @@ assert rules == expected, f'missing {expected - rules}, unexpected {rules - expe
 descriptions = [f['message'] for f in findings if f['skill'] == 'bad-skill' and f['rule'] == 'description']
 assert len(descriptions) == 2, f'both first person and no trigger should be flagged, got {descriptions}'
 assert done.returncode == 1, 'fix-level findings should exit 1'
+
+with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as work:
+    write(Path(tmp), 'NOTICE.md', 'bad-skill is based on something from someone.\n')
+    write(Path(work), 'bad-skill/SKILL.md', BAD)
+    done = subprocess.run([sys.executable, '-I', str(CHECK), f'{work}/bad-skill', '--skills-root', tmp, '--json'], capture_output=True, text=True)
+    credit = [f for f in json.loads(done.stdout) if f['rule'] == 'credit']
+assert credit == [], f'a work copy should be credited by the NOTICE in --skills-root, got {credit}'
 print('ok')

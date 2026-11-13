@@ -45,7 +45,7 @@ def frontmatter(text):
     return keys, end + 2
 
 
-def audit(skill_dir, known, private):
+def audit(skill_dir, root, known, private):
     out = []
     name = skill_dir.name
     add = lambda f, line, rule, level, msg: out.append({'skill': name, 'file': f, 'line': line, 'rule': rule, 'level': level, 'message': msg})
@@ -132,7 +132,7 @@ def audit(skill_dir, known, private):
                     add(ref.relative_to(skill_dir.resolve()).as_posix(), 1, 'nested-ref', 'fix', f'links on to {t}; keep references one level deep from SKILL.md')
 
     based_on = re.search(r'^\s+based-on:', text.split('\n---', 1)[0], re.M)
-    notice = next((p for p in (skill_dir.parent / 'NOTICE.md', skill_dir.parent / 'NOTICE') if p.is_file()), None)
+    notice = next((p for p in (root / 'NOTICE.md', root / 'NOTICE') if p.is_file()), None)
     if based_on and (notice is None or not re.search(r'\b' + re.escape(name) + r'\b', notice.read_text())):
         add('SKILL.md', 1, 'credit', 'fix', 'has based-on but the folder NOTICE does not credit it')
     return out
@@ -154,7 +154,7 @@ def main():
     root = Path(a.skills_root).expanduser() if a.skills_root else (folder.parent if (folder / 'SKILL.md').is_file() else folder)
     known = BUILT_IN | {p.name for p in root.iterdir() if (p / 'SKILL.md').is_file()} | {k for k in a.known.split(',') if k}
     private = [w for w in a.private.split(',') if w]
-    findings = [f for s in skills for f in audit(s, known, private)]
+    findings = [f for s in skills for f in audit(s, root, known, private)]
     if a.json:
         print(json.dumps(findings, indent=1))
     else:
