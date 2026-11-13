@@ -23,6 +23,8 @@ Shape: skimmable first
 - A paragraph carrying more than two numbers becomes bullets or a table. Counts, rates, dates, and windows that describe one thing (an error's history, a rollout) are a two-column table: fact | value.
 - Inline code is for one identifier the reader might type or grep: an endpoint, an error code, a command, a column. A query, a set of bound values, a log line, or anything that would wrap goes in a `<pre><code>` block under the sentence that introduces it.
 - Dates are plain text ("8 Oct 2026"). No date chips.
+- Write for every reader at once. No reader labels and no "ask X first" lines; each bullet works for anyone who reads it.
+- Depth goes one page down. When a part serves only a few readers (the full method, derivations), move it to a child page and link it, so the main page stays skimmable.
 
 Voice
 - Write to the person doing the work, in second person: "Watch all three channels during your shift."
@@ -31,6 +33,9 @@ Voice
 - State the default explicitly: "Default: 1 primary per shift."
 - Give a concrete example with numbers when a rule is easy to misread: "a Normal inquiry that lands at 10:00 should not sit until 17:00."
 - Be supportive where the reader might feel blamed (asking for help, a quiet shift). One sentence of reassurance, then the rule.
+- In a findings doc, write as the engineer presenting the result. State what is true. Don't narrate how the investigation went or point at what others didn't do.
+- Trust the reader. Cut mechanics a capable engineer doesn't need to act on; keep the result, and put the mechanics in the appendix or a child page.
+- One plain word per concept, used everywhere. Prefer the word the team already uses over a coined one the reader has to translate.
 
 Rule, then why
 - State the rule first. If the reason is not obvious, follow it with a paragraph that opens with a bold lead: `<p><strong>Why not Monday morning.</strong> Issues pile up over the weekend...</p>`. The reason is part of the policy. Readers follow rules they understand and argue less about them.
@@ -48,12 +53,25 @@ Tables
 - Use a table whenever the reader compares rows on the same attributes: roles, severities, escalation levels, sprint length vs arrangement.
 - Bold the first column only when it is the lookup key. Bold the one cell value a skimmer hunts for (the SLA number), nothing else.
 - Put lists inside cells as `<ul>`; never join items with " · ".
+- Headers are a word or two. The explanation goes in the sentence above the table.
+
+Numbers
+- Every table adds up to the number the text quotes for it. If they differ, add the missing rows (subtotal, adjustments) until they match.
+- A column header names what the number is out of.
+- One unit, defined once. Use % for levels and changes, and say once near the top that changes are percentage points. No "points" or "pp" in the body.
+- A cell that looks wrong explains itself in parentheses.
+
+Stay on the question
+- Every row, bullet, and open item serves the doc's question. True but off-topic findings go in a collapsed "Found along the way" in the appendix.
+- Open items that hang on luck rather than on a check get cut.
+- Every mechanism the TL;DR leans on gets its own section.
 
 Single source of truth
 - Each rule lives in exactly one section. Everywhere else links to it: "see <a href="#3.2-Secondary-on-call">§3.2 Secondary on-call</a>". A rule restated in three sections goes wrong the first time someone edits only one of them.
 
 Evidence
 - Link every source inline, right where you cite it: the Sentry issue, the PR, the ticket, the dashboard, the log search or query. The reader reaches the evidence in one click, never by asking where it is.
+- A findings or research doc links the evidence (code, commits, queries, docs), not the work tracker. Ticket keys add nothing to a finding.
 
 Punctuation and emphasis
 - No em dash (—) and no en dash (–), anywhere: body, headings, table cells, title. Use a period, colon, comma, or parentheses. Ranges are "1 to 2 weeks", "09:00 to 18:00".
@@ -62,13 +80,59 @@ Punctuation and emphasis
 - Times carry the team's timezone, written out: "18:00 UTC", never a bare "18:00".
 - Before finishing, run the draft prose through the `unslop` rules.
 
+## Examples: bad vs good
+
+Write for every reader at once
+- Bad: "**Infra:** turn on the new rule. **Product:** nothing changes for you."
+- Good: "**Turning on the new rule changes nothing users see.** Infra owns the switch."
+
+The TL;DR says how
+- Bad: "**p95 checkout latency drops from 900 ms to 300 ms.**"
+- Good: the same claim, then nested bullets: "Batching the price lookups saves 400 ms." "Dropping the second auth call saves 150 ms." "An index on the orders table saves 50 ms."
+
+Tables add up to the text
+- Bad: the TL;DR says errors fall 60%, and the table's rows sum to 52%.
+- Good: the table gets a "Retries removed: 8%" row and a "Total: 60%" row.
+
+Headers say what the number is out of
+- Bad: a column called "Conversion".
+- Good: "Conversion (orders ÷ checkout visits)".
+
+One unit, defined once
+- Bad: "Conversion falls 4 points, then 3 pp more, a 12% relative drop."
+- Good: one line near the top says changes are percentage points; the body says "Conversion falls 4%, then 3% more."
+
+A cell that looks wrong explains itself
+- Bad: "Refund rate: 0%" in the first week's row.
+- Good: "0% (refunds open after 14 days)".
+
+One plain word per concept
+- Bad: "abandoned carts" in one section, "ghost orders" in the next, "stale baskets" in a table.
+- Good: "abandoned carts" everywhere, because that's what the team calls them.
+
+Write as the engineer presenting the result
+- Bad: "Nobody has asked the payments team, and the commit doesn't say why the timeout is 30 s."
+- Good: "The timeout is 30 s. The payments team decides whether it can drop to 5 s."
+
+Trust the reader
+- Bad: "The error tracker keeps 1 in 10 events, so we multiplied by 10, then removed duplicates by fingerprint, then..."
+- Good: "About 12k users hit the error a day (scaled for sampling; method in the appendix)."
+
+Stay on the question
+- Bad: an open item "Whether next month's traffic looks like this month's."
+- Good: cut it, or replace it with a check: "Re-measure two weeks after launch."
+
+A research doc opens with its method
+- Bad: "This page covers the checkout latency investigation. Read it before planning."
+- Good: "**Every number here comes from the raw request logs (1 to 14 Mar), not the sampled dashboard.**" Then status and date as bullets in a note panel below.
+
 ## Panels
 
 Every panel opens with a one-sentence bold claim, then one to three sentences of reason. A panel holds paragraphs and lists only (no tables, no nested panels). At most one panel per subsection and never three in a row; a panel used on routine text dilutes the ones that matter.
 
 | Type | Use it for | Example claim |
 |---|---|---|
-| `panel-info` | Exactly one, at the very top: what the doc covers and who reads it when, plus a status and review line. No owner line. Orientation only; conclusions go in the TL;DR right below it. | "Read this before your first shift." |
+| `panel-info` | Exactly one, at the very top: what the doc covers and who reads it when, plus a status and review line. No owner line. Orientation only; conclusions go in the TL;DR right below it. In a research or findings doc it states the method instead: what data the numbers come from, the window, and why that source over the obvious one, with the key facts bold. Status, date, and earlier parts then go as bullets in a `panel-note` right below it. | "Read this before your first shift." / "Every number here comes from the raw request logs." |
 | `panel-note` | A boundary or clarification the reader needs to apply the rule correctly: ownership limits, a term defined precisely, an edge case, a graduation criterion. Also the closing "Open items" panel. | "Acknowledge ≠ resolve." / "Ownership stays with the change owner." |
 | `panel-warning` | A behaviour the reader will get wrong by default or under pressure, plus its cost. | "These are ceilings, not waiting periods." / "Acknowledging is the primary's job." |
 | `panel-error` | Rare. An action that causes irreversible damage (data loss, money moved). Most docs need none. | "Never run the backfill against prod without a snapshot." |
@@ -93,7 +157,7 @@ Working instruction or policy (the reference shape):
 
 Close with a `panel-note` that starts "**Open items to confirm:**", lists every unknown and proposed default, and states the review cadence.
 
-Every doc, whatever its shape, opens with an unnumbered `<h2>TL;DR</h2>` directly after the info panel and before the `toc`. Three to five bullets: the conclusions and the actions a reader must take, each a bold one-sentence claim plus at most one plain sentence of detail, nothing the body does not already say. A reader who stops there has the answer.
+Every doc, whatever its shape, opens with an unnumbered `<h2>TL;DR</h2>` directly after the info panel and before the `toc`. Three to five bullets: the conclusions and the actions a reader must take, each a bold one-sentence claim plus at most one plain sentence of detail, nothing the body does not already say. A reader who stops there has the answer. When the answer is a result reached through several levers, the TL;DR also says how: the result, then the levers as nested bullets, each with what it adds.
 
 Runbook: summary panel, When to use, Prerequisites and access, Steps (`<ol>`, one action per step, expected output after each), Verify, Rollback, Escalation, Open items.
 
@@ -171,7 +235,9 @@ Write HTML. Not storage XML (`<ac:...>`), not Markdown. Run `getContentFormatGui
 - [ ] Use vocabularies that are easy to understand.
 - [ ] 1 sentence should make 1 point only. Making more than 1 point in a sentence make the sentence difficult to understand.
 - [ ] Skim test: reading only bold text, bullets, and tables gives every section's point. No paragraph over three sentences or with more than two numbers; no query or value set in inline code; no `<time>` chips.
-- [ ] Exactly one `panel-info`, at the top, with a status and review line.
+- [ ] Exactly one `panel-info`, at the top, with a status and review line (research docs: the method, with status in the note below).
+- [ ] Every table total matches the number the text quotes for it; every number column says what it is out of.
+- [ ] No reader labels, no process narration, and (in a findings doc) no ticket links.
 - [ ] Every panel opens with a bold one-sentence claim; no tables inside panels; no three panels in a row.
 - [ ] Every rule appears in one section; repeats are links.
 - [ ] Every cited source (Sentry issue, PR, ticket, dashboard, query) is linked inline where it's cited.
