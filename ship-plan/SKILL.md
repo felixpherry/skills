@@ -29,6 +29,8 @@ Your context is for decisions, not file contents. Run every step below in a fres
 
 Run the steps in order. Each step names the skill it uses, so changing this list changes the pipeline.
 
+`check`, `test`, `lint` and `format` are the repo's own commands, resolved the way **Project commands** in [the task loops' rules](../run-simple-loop/task-loop-rules.md) says. Pass a helper the role names, never a tool you picked.
+
 **Before the first step you run, check that you can push.** Run `git push --dry-run origin HEAD` yourself. It asks the remote for write access and sends nothing. If it fails, stop and go to **Report back** with its error. Step 11 would fail the same way, after every step before it had run.
 
 1.  **Build.** A helper runs the chosen loop: `/run-<loop>-loop <plan folder>`. For the phased loop, the helper is that loop's orchestrator, so don't tell it to run solo.
@@ -43,7 +45,7 @@ Run the steps in order. Each step names the skill it uses, so changing this list
 5.  **Fix, once.** One helper does what falsify ruled (cut, narrow, fix) and fixes taste-test's broke lines. Each fix comes with a test that fails without it, where a test can show it. A fix that needs a new rule or special case (a branch for one input, a new setting or flag) isn't made: it goes to **Known limitations**, since it often means the design is wrong. There is no second fix round.
 6.  **Simplify.** A helper runs the `simplify` skill if you have it, then deslop, on the branch's changes, then runs `test`.
 7.  **Spec check.** A helper runs check-gaps on the plan folder, fixes every gap it lists, then runs `check` and `test` until both pass.
-8.  **Verify.** A helper runs `check` and `test`, then lints and formats the files that changed, and fixes until everything passes.
+8.  **Verify.** A helper runs `check`, `test`, `lint` and `format`, and fixes the files that changed until everything passes.
 9.  **Taste test again, only if code changed.** If no step since the first taste test changed code, skip this; the first run's verdicts stand. Otherwise a helper runs taste-test's second run. Anything still broken goes to **Known limitations**; don't fix it.
 10. **Tidy the branch.** A helper runs make-pr-easy-to-review before anything is pushed: it squashes noise into clean commits, writes the PR description (see below) to a file, and lists the pictures to attach. Give it the plan folder.
 11. **Open the PR.** A helper pushes the branch and opens the PR with that description, using the repo's own PR skill if it has one, else `gh pr create`. It attaches the listed pictures as make-pr-easy-to-review says, with `gh pr edit` after if the repo's skill can't attach. It returns the link. Then stop every helper still running.
