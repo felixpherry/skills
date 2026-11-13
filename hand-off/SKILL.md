@@ -1,6 +1,6 @@
 ---
 name: hand-off
-description: Hands work to a fresh agent in its own orb session. Writes a handoff note, creates the session (with its own git worktree for code work, or as a colonist when called from a colony), starts Claude or pi with the chosen model and effort, and sends the note as the first prompt, including which pane to report back to. Use when the user says "hand this off" or wants work continued in a new session or worktree, or when another skill such as approve-plan needs to launch a runner.
+description: Hands work to a fresh agent in its own orb session. Writes a handoff note, creates the session (with its own git worktree for code work, as a colonist when called from a colony, or in a colony the user makes when a colony hands off itself), starts Claude or pi with the chosen model and effort, and sends the note as the first prompt, including which pane to report back to. Use when the user says "hand this off" or wants work continued in a new session or worktree, or when another skill such as approve-plan needs to launch a runner.
 argument-hint: "[what the new agent should do] [model] [effort]"
 ---
 
@@ -24,7 +24,8 @@ Reference specs, plans, commits and tickets by path or link instead of copying t
 
 - **Code work in a repo:** `orb session create --worktree --name "<short name>"`. It branches a new worktree from the default branch (takes ~15 s).
 - **Anything else:** `orb session create --name "<short name>"`.
-- **Called from a colony:** the new session becomes a colonist on its own. There `--worktree` alone is refused (`bad_request`): find the repo's project id with `orb project list`, then run `orb session create --project <id> --worktree --name "<short name>"`.
+- **Called from a colony:** the new session becomes your colonist. It reports to you and can't add plate items. There `--worktree` alone is refused (`bad_request`): find the repo's project id with `orb project list`, then run `orb session create --project <id> --worktree --name "<short name>"`.
+- **Handing off the colony itself:** a colonist can't replace a colony, and only the user can make one. Don't create a session. Ask the user to make a colony with `<C-g> c` and tell you its name, then stop until they answer. Find its id with `orb session list` and its shell pane with `orb pane list --session <id>`, then go on to step 3. Leave "Report back" out of the note: the new colony answers to the user.
 
 The reply names the new session's shell pane: `{"session": 7, "pane": 30}`. The session doesn't open in the user's view. Never focus it.
 
