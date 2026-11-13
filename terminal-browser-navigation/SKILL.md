@@ -1,11 +1,13 @@
 ---
 name: terminal-browser-navigation
-description: Navigate an existing terminal-browser tab without creating another tab. Use when driving terminal-browser in orb, including a Lavish page, and changing the selected tab's URL, reloading a review page at a new URL, or staying in the original tab.
+description: Visit URLs in terminal-browser without piling up tabs. Use whenever you run terminal-browser action to visit a URL, in any tab, any browser, or a loop over many URLs, including Lavish pages and review reloads.
 ---
 
 # Navigate the selected tab
 
 **Use `navigate` or `goto` to stay in the selected tab.** `terminal-browser action -- open URL` creates another tab, even with an explicit tab selector. Do not use it for same-tab navigation or replace navigation with script evaluation.
+
+**Close a tab with `-- tab close`.** Plain `-- close` prints "Browser closed" and leaves the tab open.
 
 ## Select, navigate, verify
 
