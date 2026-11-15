@@ -1,6 +1,6 @@
 ---
 name: explain-how
-description: "Explains how code works: architecture, runtime flow, and where things live, at the level of a senior engineer onboarding onto a subsystem. Use for 'how does X work', a walkthrough before changing something, or placement questions ('where should this live', 'which package owns this', 'is this the right layer'). For why it was built that way, use explain-why."
+description: "Explains how code works. Use for 'how does X work', a walkthrough before a change, or 'where should this live'. For why it was built that way, use explain-why."
 metadata:
   based-on: "how from pstack by Lauren Tan, via michael-denyer/pstack-claude (MIT)"
 ---
