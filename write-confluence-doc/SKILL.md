@@ -8,10 +8,10 @@ argument-hint: <topic, draft text, or existing page URL>
 
 ## Steps
 
-1. **Gather facts.** Collect the source material: the user's notes, an existing page (read as HTML; see [Atlassian tools](#atlassian-tools)), tickets, code. Every rule, number, name, and time in the doc comes from that material or from the user. A fact you lack becomes an entry in the closing "Open items" panel, never a guess. Done when you can name, for each section, where its facts came from.
-2. **Outline.** Pick the skeleton for the doc type (see [Skeletons](#skeletons)) and write the numbered heading list. Show it to the user when the doc is new or the structure changes. Done when the user accepts the outline, or the task is a polish of an existing page with fixed structure.
-3. **Draft** the body as Confluence HTML (see [Markup](#markup)) into a file in the scratchpad. Apply [Writing rules](#writing-rules) and [Panels](#panels) as you go.
-4. **Check** the draft against every item in [Pre-publish check](#pre-publish-check). Done when each item passes.
+1. **Gather facts.** Collect the source material: the user's notes, an existing page (read as HTML; see [references/markup.md](references/markup.md)), tickets, code. Every rule, number, name, and time in the doc comes from that material or from the user. A fact you lack becomes an entry in the closing "Open items" panel, never a guess. Done when you can name, for each section, where its facts came from.
+2. **Outline.** Pick the skeleton for the doc type from [references/skeletons.md](references/skeletons.md) and write the numbered heading list. Show it to the user when the doc is new or the structure changes. Done when the user accepts the outline, or the task is a polish of an existing page with fixed structure.
+3. **Draft** the body as Confluence HTML into a file in the scratchpad. The elements and the Atlassian tools are in [references/markup.md](references/markup.md). Apply [Writing rules](#writing-rules), [Panels](#panels) and [Every doc](#every-doc). Read [references/examples.md](references/examples.md) before the first draft of a session: it shows each rule as a bad line and a good line.
+4. **Check.** Run `python3 -I scripts/check_draft.py <draft> --title "<title>"` from this skill's folder and fix the draft until it prints nothing. Then pass every item in [Pre-publish check](#pre-publish-check), which covers what the script can't see.
 5. **File and publish.** Find where the page goes: if the workspace has a filing skill or convention for its space, use it to get the parent page and labels; otherwise ask the user. Show the user the title, destination, and a short summary, then publish only after they confirm. Updating an existing page: update it in place with a one-line version message. Print the page URL last.
 
 ## Writing rules
@@ -38,7 +38,7 @@ Voice
 - One plain word per concept, used everywhere. Prefer the word the team already uses over a coined one the reader has to translate.
 
 Rule, then why
-- State the rule first. If the reason is not obvious, follow it with a paragraph that opens with a bold lead: `<p><strong>Why not Monday morning.</strong> Issues pile up over the weekend...</p>`. The reason is part of the policy. Readers follow rules they understand and argue less about them.
+- State the rule first. If the reason is not obvious, follow it with a paragraph that opens with a bold lead: `<p><strong>Why not Monday morning.</strong> Issues pile up over the weekend...</p>`.
 - Keep the reason to what changes behaviour. Drop history ("the policy previously paged everyone") from the body; put it in a "Changes" section at the end if it matters.
 
 Separate what gets conflated
@@ -67,68 +67,21 @@ Stay on the question
 - Every mechanism the TL;DR leans on gets its own section.
 
 Single source of truth
-- Each rule lives in exactly one section. Everywhere else links to it: "see <a href="#3.2-Secondary-on-call">§3.2 Secondary on-call</a>". A rule restated in three sections goes wrong the first time someone edits only one of them.
+- Each rule lives in exactly one section. Everywhere else links to it: "see <a href="#3.2-Secondary-on-call">§3.2 Secondary on-call</a>".
 
 Evidence
-- Link every source inline, right where you cite it: the Sentry issue, the PR, the ticket, the dashboard, the log search or query. The reader reaches the evidence in one click, never by asking where it is.
+- Link every source inline, right where you cite it: the Sentry issue, the PR, the ticket, the dashboard, the log search or query.
 - A findings or research doc links the evidence (code, commits, queries, docs), not the work tracker. Ticket keys add nothing to a finding.
 
 Punctuation and emphasis
 - No em dash (—) and no en dash (–), anywhere: body, headings, table cells, title. Use a period, colon, comma, or parentheses. Ranges are "1 to 2 weeks", "09:00 to 18:00".
-- Bold budget: about one bold phrase per paragraph or bullet, on the rule a skimmer must catch. Bold that lands on every line stops meaning anything.
+- Bold budget: about one bold phrase per paragraph or bullet, on the rule a skimmer must catch.
 - "Not X, but Y" only when the reader actually believes X (for example, that the SLA is a waiting period). A few per doc at most.
 - Times carry the team's timezone, written out: "18:00 UTC", never a bare "18:00".
-- Before finishing, run the draft prose through the `unslop` rules.
-
-## Examples: bad vs good
-
-Write for every reader at once
-- Bad: "**Infra:** turn on the new rule. **Product:** nothing changes for you."
-- Good: "**Turning on the new rule changes nothing users see.** Infra owns the switch."
-
-The TL;DR says how
-- Bad: "**p95 checkout latency drops from 900 ms to 300 ms.**"
-- Good: the same claim, then nested bullets: "Batching the price lookups saves 400 ms." "Dropping the second auth call saves 150 ms." "An index on the orders table saves 50 ms."
-
-Tables add up to the text
-- Bad: the TL;DR says errors fall 60%, and the table's rows sum to 52%.
-- Good: the table gets a "Retries removed: 8%" row and a "Total: 60%" row.
-
-Headers say what the number is out of
-- Bad: a column called "Conversion".
-- Good: "Conversion (orders ÷ checkout visits)".
-
-One unit, defined once
-- Bad: "Conversion falls 4 points, then 3 pp more, a 12% relative drop."
-- Good: one line near the top says changes are percentage points; the body says "Conversion falls 4%, then 3% more."
-
-A cell that looks wrong explains itself
-- Bad: "Refund rate: 0%" in the first week's row.
-- Good: "0% (refunds open after 14 days)".
-
-One plain word per concept
-- Bad: "abandoned carts" in one section, "ghost orders" in the next, "stale baskets" in a table.
-- Good: "abandoned carts" everywhere, because that's what the team calls them.
-
-Write as the engineer presenting the result
-- Bad: "Nobody has asked the payments team, and the commit doesn't say why the timeout is 30 s."
-- Good: "The timeout is 30 s. The payments team decides whether it can drop to 5 s."
-
-Trust the reader
-- Bad: "The error tracker keeps 1 in 10 events, so we multiplied by 10, then removed duplicates by fingerprint, then..."
-- Good: "About 12k users hit the error a day (scaled for sampling; method in the appendix)."
-
-Stay on the question
-- Bad: an open item "Whether next month's traffic looks like this month's."
-- Good: cut it, or replace it with a check: "Re-measure two weeks after launch."
-
-A research doc opens with its method
-- Bad: "This page covers the checkout latency investigation. Read it before planning."
-- Good: "**Every number here comes from the raw request logs (1 to 14 Mar), not the sampled dashboard.**" Then status and date as bullets in a note panel below.
 
 ## Panels
 
-Every panel opens with a one-sentence bold claim, then one to three sentences of reason. A panel holds paragraphs and lists only (no tables, no nested panels). At most one panel per subsection and never three in a row; a panel used on routine text dilutes the ones that matter.
+Every panel opens with a one-sentence bold claim, then one to three sentences of reason. A panel holds paragraphs and lists only (no tables, no nested panels). At most one panel per subsection and never three in a row.
 
 | Type | Use it for | Example claim |
 |---|---|---|
@@ -139,112 +92,22 @@ Every panel opens with a one-sentence bold claim, then one to three sentences of
 
 Skip `panel-success`, custom panels, and emoji panels.
 
-## Skeletons
+## Every doc
 
 Sections are numbered `<h2>` ("4. Coverage & response SLA"), subsections numbered `<h3>` ("3.1 Primary on-call"), and an occasional unnumbered `<h4>` for a named idea inside a subsection. Sentence case. Docs with six or more sections get a `toc` macro (`maxLevel` 2) right after the info panel.
 
-Working instruction or policy (the reference shape):
-1. What is X? Definition, why it exists, and what it does not cover (link to the scope section).
-2. When and how long. Mechanics, with a "Why" paragraph for any choice that looks odd.
-3. Who. Roles table (role, expectation, purpose, counts as X?), then one subsection per role.
-4. Expectations. SLA or targets table, then the note and warning that stop misreadings.
-5. Inputs. Where the work comes from, and the single system of record.
-6. Scope of responsibility. One subsection per duty; include "when to hand off or call for help" with a trigger list.
-7. Escalation and exceptions.
-8. Remaining policies (location, compensation), one section each.
-9. Checklist table: When | Do this, with a `<ul>` per cell.
-10. Changes (optional): dated rows for what changed and why.
-
-Close with a `panel-note` that starts "**Open items to confirm:**", lists every unknown and proposed default, and states the review cadence.
-
-Every doc, whatever its shape, opens with an unnumbered `<h2>TL;DR</h2>` directly after the info panel and before the `toc`. Three to five bullets: the conclusions and the actions a reader must take, each a bold one-sentence claim plus at most one plain sentence of detail, nothing the body does not already say. A reader who stops there has the answer. When the answer is a result reached through several levers, the TL;DR also says how: the result, then the levers as nested bullets, each with what it adds.
-
-Runbook: summary panel, When to use, Prerequisites and access, Steps (`<ol>`, one action per step, expected output after each), Verify, Rollback, Escalation, Open items.
-
-System or architecture doc (`[Tech Docs]`, `[System Design]`, `[Tech Flow]`):
-1. What is X? What the system does, what it owns, what it leaves to other services (by name).
-2. How it works. The main flow as an `<ol>`, one hop per step: caller, service, endpoint or queue in `<code>`, what changes. A diagram image goes after the list, never instead of it.
-3. Components and ownership. Table: component | repo | owner | notes.
-4. Data model. Per table: column | type | meaning. Name who writes and who reads it.
-5. States. If anything has a status, a table of status | meaning | set by | next states.
-6. Integrations and config. External parties, which env vars or secrets exist and where they live. Never the values.
-7. Design decisions. Each decision is a rule-then-why: what was chosen, a bold "Why X." paragraph, and the rejected option in one sentence.
-8. Failure modes. Table: symptom | likely cause | what to check or which runbook.
-9. Open items.
-
-Bug investigation and fix (`[Investigation]`). Load `write-investigation` first for the voice, the earned title, and the evidence classes (observed, measured, inferred, unknown). The story decides the order of sections and the title. Paragraph shape, markup, panels, and the dash ban come from this skill: a story section is still bold-claim bullets, short paragraphs, and tables, never a run of long paragraphs. Where the two disagree (shape, dashes), this one wins. Title is `[Investigation] <earned title>`. If the space has an approved example investigation, read it before drafting one.
-- Info panel: what broke and the current status in one sentence. Second line: ticket, PR, "As of" date, commit SHA.
-- TL;DR: symptom, root cause in one sentence, the fix with PR link, impact, and what is still open.
-- 1. Symptom. What users or alerts saw, with numbers and the first-seen time in the team's timezone. How to reproduce, or that it is intermittent and under what conditions.
-- 2. Why it was hard. The first crack: which observation broke the obvious explanation. Chapter-style heading text is fine here and in 4; keep the number.
-- 3. Hypotheses. Table: hypothesis | how we tested it | result | verdict. Verdict is a status lozenge: red "Ruled out", green "Confirmed", yellow "Unverified". This table is what stops the next engineer from retrying dead ends, so keep the ruled-out rows.
-- 4. Root cause. The mechanism as an `<ol>`, one causal step per item, each citing `<code>repo/path/file:line</code>`. State the exact trigger conditions. The trap that hid it goes in a `panel-warning`.
-- 5. Fix. What changed, why at that spot (every caller that routes through it), PR links, the rejected fix in one sentence with its reason.
-- 6. Verification. Repro before and after, the test that now fails without the fix, production signal after deploy.
-- 7. Impact and cleanup. Affected orders, users, or money, and whether a backfill ran (link it) or is still open.
-- 8. Prevention. The alert, test, or guard that would have caught it earlier, each with an owner or a ticket.
-- 9. Open items.
-- Appendix: dated timeline table, then queries, commands, and raw logs, each inside `<details><summary>...</summary>...</details>` so evidence stays one click away without burying the story.
-
-Tech doc extras: the info panel's second line carries an "As of" date (and the commit SHA when the doc was traced from code), since system docs go stale. Cite code as `<code>repo/path/file.ts:123</code>`. Put gotchas a reader will trip on (ordering, retries, idempotency, timezone) in a `panel-warning` right where the flow hits them. For a flow you still have to trace from code, trace it first (with the workspace's tracing skill if it has one), then use this skill for the writing.
-
-## Atlassian tools
-
-These are the Atlassian MCP v2 tools (`https://mcp.atlassian.com/v2/mcp`). Get `cloudId` once from `getAccessibleAtlassianResources`.
-
-- **Read:** `getConfluenceContent` with `detail: "full"` and `content_format: "html"`.
-- **Create:** `createConfluenceContent` with `contentType: "page"`, the parent, and `body: {format: "html", value}`.
-- **Update:** `updateConfluenceContent` with the `snapshotToken` from your last read, `body: {format: "html", value}`, and a one-line `versionMessage`.
-- **Space instructions:** the tools ask you to load the space's own authoring instructions first (`getConfluenceSpace` through `executeRead`). Follow them where they don't clash with this skill.
-- **Anything else** (a user lookup, the format guide): find the operation with `discover`, then run it with `executeRead`.
-
-## Markup
-
-Write HTML. Not storage XML (`<ac:...>`), not Markdown. Run `getContentFormatGuide` (through `executeRead`, toolName `createConfluencePage`) once if you need an element not shown here.
-
-```html
-<div data-type="panel-info">
-  <p>Working instruction for the ... It defines who ..., when ..., and <strong>the one thing to remember</strong>. Read this before ...</p>
-  <p>As of 8 Oct 2026 · Review every quarter</p>
-</div>
-<h2>TL;DR</h2>
-<ul><li><p><strong>Conclusion in one sentence.</strong> One sentence of detail.</p></li></ul>
-<div data-type="extension" data-extension-key="toc" data-extension-type="com.atlassian.confluence.macro.core" data-parameters='{"macroParams":{"maxLevel":{"value":"2"}},"macroMetadata":{"schemaVersion":{"value":"1"},"title":"Table of Contents"}}'></div>
-
-<h2>1. What is X?</h2>
-<p>...</p>
-
-<h3>3.1 Primary on-call</h3>
-<p>Rule. <strong>Why fixed timings.</strong> Reason.</p>
-
-<div data-type="panel-warning"><p><strong>Claim in one sentence.</strong> Why it matters.</p></div>
-
-<table data-width="760">
-  <thead><tr><th><p>When</p></th><th><p>Do this</p></th></tr></thead>
-  <tbody><tr><td><p><strong>Start of shift</strong></p></td><td><ul><li><p>First action</p></li><li><p>Second action</p></li></ul></td></tr></tbody>
-</table>
-```
-
-- Same-page links use the hash form `#` + heading text with spaces as hyphens: `<h3>6.5 Handover &amp; documentation</h3>` is `href="#6.5-Handover-&amp;-documentation"`. Link text carries the section: "§6.5 Handover & documentation". Never a full page URL for a link within the page.
-- People: a real mention needs an Atlassian account id (find the user-lookup operation with `discover`); without one write `[@name]` as plain text.
-- When editing an existing page, keep every `<span class="annotation" ...>` intact so inline comments stay anchored.
+It opens with an unnumbered `<h2>TL;DR</h2>` directly after the info panel and before the `toc`. Three to five bullets: the conclusions and the actions a reader must take, each a bold one-sentence claim plus at most one plain sentence of detail, nothing the body does not already say. A reader who stops there has the answer. When the answer is a result reached through several levers, the TL;DR also says how: the result, then the levers as nested bullets, each with what it adds.
 
 ## Pre-publish check
 
-- [ ] `grep -n -e '—' -e '–' <draft>` returns nothing (title included).
-- [ ] Use vocabularies that are easy to understand.
-- [ ] 1 sentence should make 1 point only. Making more than 1 point in a sentence make the sentence difficult to understand.
-- [ ] Skim test: reading only bold text, bullets, and tables gives every section's point. No paragraph over three sentences or with more than two numbers; no query or value set in inline code; no `<time>` chips.
-- [ ] Exactly one `panel-info`, at the top, with a status and review line (research docs: the method, with status in the note below).
+The script covers dashes, date chips, links, panel rules and the TL;DR's place and size. These need a read:
+
+- [ ] Skim test: reading only bold text, bullets, and tables gives every section's point. No paragraph over three sentences or with more than two numbers; no query or value set in inline code.
 - [ ] Every table total matches the number the text quotes for it; every number column says what it is out of.
-- [ ] No reader labels, no process narration, and (in a findings doc) no ticket links.
-- [ ] Every panel opens with a bold one-sentence claim; no tables inside panels; no three panels in a row.
-- [ ] Every rule appears in one section; repeats are links.
-- [ ] Every cited source (Sentry issue, PR, ticket, dashboard, query) is linked inline where it's cited.
-- [ ] Every same-page link is a `#anchor` that matches a heading exactly, punctuation included (`<h2>5. Fix (not chosen yet)</h2>` is `#5.-Fix-(not-chosen-yet)`). No `href="#"`.
 - [ ] No sentence claims more than its table shows. If a row says "Untested", the text does not say every option works.
 - [ ] A hypotheses table lists candidate causes only. Rejected fixes go in the fix section's options table.
-- [ ] Every non-obvious rule has its "Why" paragraph; every role or decision names who decides.
+- [ ] Every rule appears in one section; repeats are links.
+- [ ] Every cited source (Sentry issue, PR, ticket, dashboard, query) is linked inline where it's cited.
 - [ ] Unknowns and proposed defaults are in the closing "Open items to confirm" panel, with the review cadence.
-- [ ] `<h2>TL;DR</h2>` sits directly after the info panel, with three to five bold-claim bullets and no new facts.
-- [ ] Unslop pass done: no "not just X, but Y", generic closers, forced triads, or decorative bold.
+- [ ] The TL;DR says nothing the body doesn't.
+- [ ] The prose passes the `unslop` rules.
