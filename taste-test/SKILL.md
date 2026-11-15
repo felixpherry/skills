@@ -15,7 +15,7 @@ Tests pass against fakes; users hit the real thing. You run the build the way it
 
 ## Set up a throwaway copy
 
-1. **Use the project's recipe if it has one:** `~/.orb/recipes/<repo>/RECIPE.md`, where `<repo>` is the repo's name: the end of its `origin` remote, like `orb`, else its main checkout's folder name. Run its scripts as it shows; don't retype their steps. Launch, check and drive the program, and clean up, as it says. Else look in the repo's `AGENTS.md` / `CLAUDE.md` for how to try it.
+1. **Use the project's recipe if it has one.** `~/.agents/skills/write-recipe/scripts/recipe_dir.sh` prints its folder and exits 1 when there is no `RECIPE.md` in it. Run its scripts as it shows; don't retype their steps. Launch, check and drive the program, and clean up, as it says. Else look in the repo's `AGENTS.md` / `CLAUDE.md` for how to try it.
 2. **Otherwise build a setup,** and put the steps in your report, so write-recipe can turn them into a recipe:
    - a temp folder for the program's home, config and state, so nothing you do reaches the user's real copy;
    - a copy of the user's real data where the program keeps some locally, because empty setups hide the bugs users hit;

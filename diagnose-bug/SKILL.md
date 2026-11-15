@@ -1,6 +1,6 @@
 ---
 name: diagnose-bug
-description: Finds the cause of an everyday bug and proves it with a repro before anyone fixes it, then ends with a fix plan to approve. Use for a bug ticket, a Sentry issue or an error to explain, or for "diagnose this", "why does this happen", "find the root cause" or "is this a bug". Hard bugs and questions about a number go to orb's Research world.
+description: "Finds the cause of a bug and proves it with a repro. Use for a bug ticket, a Sentry issue, an error to explain, 'why does this happen' or 'is this a bug'. Hard bugs and questions about a number go to orb's Research world."
 ---
 
 # Diagnose a bug

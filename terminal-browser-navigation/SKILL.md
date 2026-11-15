@@ -5,24 +5,9 @@ description: Visit URLs in terminal-browser without piling up tabs. Use whenever
 
 # Navigate the selected tab
 
-**Use `navigate` or `goto` to stay in the selected tab.** `terminal-browser action -- open URL` creates another tab, even with an explicit tab selector. Do not use it for same-tab navigation or replace navigation with script evaluation.
+Run `scripts/nav.sh <orb pane> <url> [<tab id>]` from this skill's folder. It navigates the pane's browser in place (the active tab unless you name one), releases the browser, and fails if a tab was added or the tab was replaced. It prints `browser=<key> tab=<id> url=<where it landed>` and doesn't move the user's focus.
 
-**Close a tab with `-- tab close`.** Plain `-- close` prints "Browser closed" and leaves the tab open.
+By hand, the same thing is `terminal-browser action --browser KEY --tab ID -- navigate URL`, with both selectors and no `--follow`.
 
-## Select, navigate, verify
-
-1. Resolve the intended browser pane with `orb pane browser PANE`. Use its returned key as `KEY`.
-2. Run `terminal-browser ls --all --json`. Find the browser matching `KEY`, then choose the intended tab's `id` as `ID`. Note its URL, `targetId`, and tab count.
-3. Replace `KEY`, `ID`, and `URL` below with those values and the destination. Keep both selectors on every action. Omit `--follow` so the user's selected tab stays unchanged.
-
-```sh
-terminal-browser action --browser KEY --tab ID -- navigate URL
-terminal-browser ls --all --json
-```
-
-4. Confirm the selected tab has the destination URL, the same `id` and `targetId`, and no added tab. `goto URL` also supports same-tab navigation.
-5. Release control when finished. `done` is a wrapper command, without the `--` separator.
-
-```sh
-terminal-browser action --browser KEY --tab ID done
-```
+- **`-- open URL` always creates another tab,** even with a tab selector. Never use it to visit a page in an existing tab.
+- **Close a tab with `-- tab close`.** Plain `-- close` prints "Browser closed" and leaves the tab open.

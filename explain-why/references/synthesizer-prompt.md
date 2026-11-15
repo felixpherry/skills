@@ -1,6 +1,10 @@
 # Synthesizer Prompt Template
 
-Fill in the placeholders.
+Fill in the placeholders. Everything below the line is the prompt.
+
+## Contents
+
+The Question, The Code Anchor, Investigator Findings, Sources That Weren't Searched, Epistemics Framework, Instructions, Output Format (eight sections), Quality Check Before Returning.
 
 ---
 
