@@ -10,7 +10,7 @@ A recipe lets an agent that has never seen the project start a throwaway copy an
 
 ## Where it lives
 
-`~/.orb/recipes/<repo>/`, where `<repo>` is the repo's name: the end of its `origin` remote, like `orb`, else its main checkout's folder name. It sits outside the repo, so every worktree finds it and nothing commits it.
+`scripts/recipe_dir.sh` prints the folder, `~/.orb/recipes/<repo>/`, and exits 1 while it holds no `RECIPE.md`. It sits outside the repo, so every worktree finds it and nothing commits it.
 
 - `RECIPE.md`: the recipe.
 - Scripts: one per fixed step, executable, each with its usage in its first lines.
